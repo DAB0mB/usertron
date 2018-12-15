@@ -40,6 +40,7 @@ const SEARCH_USERS = gql `
       }
       nodes {
         ...userFields
+        ...organizationFields
       }
     }
   }
@@ -50,8 +51,19 @@ const SEARCH_USERS = gql `
     name
     login
     avatarUrl
-    email
     location
+    userEmail: email
+  }
+
+  fragment organizationFields on Organization {
+    __typename
+    id
+    description
+    name
+    login
+    avatarUrl
+    location
+    orgEmail: email
   }
 `
 

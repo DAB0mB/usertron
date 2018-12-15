@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { GithubService } from '../services/github.service'
-import { UserFields } from '../graphql-types'
+import { SearchUsers } from '../graphql-types'
 
 @Component({
   selector: 'app-users-explorer',
@@ -12,7 +12,7 @@ export class UsersExplorerComponent {
   hasNextPage = false;
   hasPreviousPage = false;
   totalUsers = 0;
-  users: UserFields.Fragment[] = [];
+  users: SearchUsers.Nodes[] = [];
 
   constructor(private github: GithubService) { }
 

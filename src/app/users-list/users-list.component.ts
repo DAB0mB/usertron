@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { UserFields } from '../graphql-types'
+import { SearchUsers } from '../graphql-types'
 
 @Component({
   selector: 'app-users-list',
@@ -8,5 +8,5 @@ import { UserFields } from '../graphql-types'
 })
 export class UsersListComponent {
   @Input()
-  users: UserFields.Fragment[] = [];
+  users: SearchUsers.Nodes[] = [];
 }

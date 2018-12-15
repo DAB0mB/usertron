@@ -4,8 +4,8 @@
       <img class="picture" [src]="user.avatarUrl" [alt]="user.name">
       <div class="info">
         <div class="name">{{user.name}}</div>
-        <div class="bio">{{user.bio}}</div>
-        <div class="email">{{user.email}}</div>
+        <div class="bio">{{user.bio || user.description}}</div>
+        <div class="email">{{user.userEmail || user.orgEmail}}</div>
       </div>
     </a>
   </mat-list-item>
