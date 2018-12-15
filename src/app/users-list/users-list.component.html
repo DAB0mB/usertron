@@ -1,10 +1,12 @@
 <mat-list>
   <mat-list-item mat-button *ngFor="let user of users">
-    <img class="picture" [src]="user.avatarUrl" [alt]="user.name">
-    <div class="info">
-      <div class="name">{{user.name}}</div>
-      <div class="bio">{{user.bio}}</div>
-      <div class="email">{{user.email}}</div>
-    </div>
+    <a [href]="'https://github.com/' + user.login">
+      <img class="picture" [src]="user.avatarUrl" [alt]="user.name">
+      <div class="info">
+        <div class="name">{{user.name}}</div>
+        <div class="bio">{{user.bio}}</div>
+        <div class="email">{{user.email}}</div>
+      </div>
+    </a>
   </mat-list-item>
 </mat-list>

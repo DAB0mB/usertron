@@ -41,6 +41,7 @@ const SEARCH_USERS = gql `
     id
     bio
     name
+    login
     avatarUrl
     email
     location

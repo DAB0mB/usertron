@@ -12,6 +12,14 @@ mat-list-item {
     width: 100%;
     text-align: left;
   }
+
+  a {
+    width: 100%;
+    height: 100%;
+    display: contents;
+    text-decoration: inherit;
+    color: inherit;
+  }
 }
 
 .picture {
