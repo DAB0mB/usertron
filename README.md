@@ -1,27 +1,18 @@
 # Usertron
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.3.
+A small website to browse through users on GitHub based on Angular, Material, and Apollo.
 
-## Development server
+## Run directions
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+(1) `$ npm install`
 
-## Code scaffolding
+(2) Create a personal GitHub access token with `user:read` permissions as specified [here](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/).
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+(3) Add access token to the environment file: `$ vim src/environments/environment.js`.
 
-## Build
+(4) Generate GraphQL types: `$ npm run codegen`
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+(5) `$ npm start`
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+<p align="center"><img src="https://user-images.githubusercontent.com/7648874/50046753-90e4ca00-00e3-11e9-91d6-4ae545fdf886.png" alt="screenshot" width="256px"></p>
