@@ -14,7 +14,15 @@ module.exports = {
   require: ['ts-node/register'],
   generates: {
     './src/app/graphql-types.ts': {
-      plugins: ['typescript-common', 'typescript-client'],
+      plugins: [
+        'typescript-common',
+        'typescript-client',
+      ],
     },
+    './src/app/graphql-introspection.json': {
+      plugins: [
+        'introspection',
+      ],
+    }
   },
 }

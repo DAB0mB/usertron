@@ -56,7 +56,6 @@ const SEARCH_USERS = gql `
   }
 
   fragment organizationFields on Organization {
-    __typename
     id
     description
     name

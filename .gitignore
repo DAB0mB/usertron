@@ -44,3 +44,4 @@ Thumbs.db
 
 # Custom
 /src/app/graphql-types.ts
+/src/app/graphql-introspection.json

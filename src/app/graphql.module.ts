@@ -5,6 +5,7 @@ import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http'
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import { environment } from '../environments/environment'
+import introspectionQueryResultData from './graphql-introspection.json'
 
 @NgModule({
   exports: [
@@ -29,31 +30,12 @@ export class GraphQLModule {
     }))
 
     const fragmentMatcher = new IntrospectionFragmentMatcher({
-      introspectionQueryResultData: {
-        __schema: {
-          types: [
-            {
-              kind: 'INTERFACE',
-              name: 'SearchResultItem',
-              possibleTypes: [
-                {
-                  name: 'Organization'
-                },
-                {
-                  name: 'User'
-                }
-              ]
-            }
-          ]
-        }
-      }
+      introspectionQueryResultData
     })
 
     apollo.create({
       link: auth.concat(http),
       cache: new InMemoryCache({
-        dataIdFromObject: obj => obj.id,
-        addTypename: false,
         fragmentMatcher,
       }),
     })
