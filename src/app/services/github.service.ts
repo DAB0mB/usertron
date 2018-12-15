@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core'
 import { Apollo } from 'apollo-angular'
 import gql from 'graphql-tag'
+import { map } from 'rxjs/operators'
+
+import { SearchUsers } from '../graphql-types'
 
 const NODES_PER_PAGE = 10
 
@@ -47,16 +50,17 @@ export class GithubService {
   constructor(private apollo: Apollo) {}
 
   searchUsers(query) {
-    return this.apollo.query({
+    return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
       variables: { query }
     })
-    .subscribe((res) => {
+    .pipe(map((res) => {
       const { search } = res.data
+      const { pageInfo } = search
 
       this.totalPages = Math.min(Math.ceil(search.userCount / NODES_PER_PAGE), 100)
-      this.startCursor = search.startCursor
-      this.endCursor = search.endCursor
+      this.startCursor = pageInfo.startCursor
+      this.endCursor = pageInfo.endCursor
       this.currNodes = search.nodes
       this.query = query
       this.currPage = 0
@@ -66,7 +70,7 @@ export class GithubService {
         currPage: this.currPage,
         nodes: this.currNodes,
       }
-    })
+    }))
   }
 
   getNextUsersPage() {
@@ -78,15 +82,16 @@ export class GithubService {
       }
     }
 
-    return this.apollo.query({
+    return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
       variables: { query: this.query, after: this.startCursor }
     })
-    .subscribe((res) => {
+    .pipe(map((res) => {
       const { search } = res.data
+      const { pageInfo } = search
 
-      this.startCursor = search.startCursor
-      this.endCursor = search.endCursor
+      this.startCursor = pageInfo.startCursor
+      this.endCursor = pageInfo.endCursor
       this.currNodes = search.nodes
       this.currPage++
 
@@ -95,7 +100,7 @@ export class GithubService {
         currPage: this.currPage,
         nodes: search.nodes,
       }
-    })
+    }))
   }
 
   getPrevUsersPage() {
@@ -107,15 +112,16 @@ export class GithubService {
       }
     }
 
-    return this.apollo.query({
+    return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
       variables: { query: this.query, before: this.endCursor }
     })
-    .subscribe((res) => {
+    .pipe(map((res) => {
       const { search } = res.data
+      const { pageInfo } = search
 
-      this.startCursor = search.startCursor
-      this.endCursor = search.endCursor
+      this.startCursor = pageInfo.startCursor
+      this.endCursor = pageInfo.endCursor
       this.currNodes = search.nodes
       this.currPage--
 
@@ -124,6 +130,6 @@ export class GithubService {
         currPage: this.currPage,
         nodes: this.currNodes,
       }
-    })
+    }))
   }
 }

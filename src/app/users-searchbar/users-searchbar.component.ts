@@ -7,5 +7,9 @@ import { GithubService } from '../services/github.service'
   styleUrls: ['./users-searchbar.component.scss']
 })
 export class UsersSearchbarComponent {
-  constructor(private github: GithubService) { }
+  constructor(private github: GithubService) {
+    github.searchUsers('dab0mb').subscribe(() => {
+      debugger
+    })
+  }
 }

@@ -21,13 +21,11 @@ export class GraphQLModule {
       uri: 'https://api.github.com/graphql'
     })
 
-    const auth = setContext((_, { headers }) => {
-      return {
-        headers: headers
-          .append('User-Agent', 'usertron')
-          .append('Authorization', 'token 6552a4da088068989fec43ea6c8c91369969db16')
+    const auth = setContext(() => ({
+      headers: {
+        'Authorization': 'token 6552a4da088068989fec43ea6c8c91369969db16',
       }
-    })
+    }))
 
     apollo.create({
       link: auth.concat(http),
