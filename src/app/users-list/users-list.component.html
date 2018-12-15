@@ -1,9 +1,10 @@
-<ul>
-  <li *ngFor="let user of users">
-    <img [src]="user.avatarUrl" [alt]="user.name">
-    <div>{{user.name}}</div>
-    <div>{{user.location}}</div>
-    <div>{{user.email}}</div>
-    <div>{{user.bio}}</div>
-  </li>
-</ul>
+<mat-list>
+  <mat-list-item mat-button *ngFor="let user of users">
+    <img class="picture" [src]="user.avatarUrl" [alt]="user.name">
+    <div class="info">
+      <div class="name">{{user.name}}</div>
+      <div class="bio">{{user.bio}}</div>
+      <div class="email">{{user.email}}</div>
+    </div>
+  </mat-list-item>
+</mat-list>

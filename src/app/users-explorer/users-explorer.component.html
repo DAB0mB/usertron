@@ -1,9 +1,12 @@
-<input type="text" [(ngModel)]="query">
-<button (click)="searchUsers()">Search</button>
+<mat-form-field class="searchbar">
+  <input matInput type="text" placeholder="Enter user query" [(ngModel)]="query">
+</mat-form-field>
+
+<button class="search-btn" mat-button color="primary" (click)="searchUsers()">Search</button>
 
 <app-users-list [(users)]="users"></app-users-list>
 
-<div *ngIf="users.length">
-  <button [disabled]="!hasPreviousPage" (click)="getPrevUsersPage()">Prev</button>
-  <button [disabled]="!hasNextPage" (click)="getNextUsersPage()">Next</button>
+<div *ngIf="users.length" class="nav-buttons">
+  <button mat-button [disabled]="!hasPreviousPage" (click)="getPrevUsersPage()">Prev</button>
+  <button mat-button [disabled]="!hasNextPage" (click)="getNextUsersPage()">Next</button>
 </div>

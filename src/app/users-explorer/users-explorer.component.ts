@@ -5,7 +5,7 @@ import { UserFields } from '../graphql-types'
 @Component({
   selector: 'app-users-explorer',
   templateUrl: './users-explorer.component.html',
-  styleUrls: ['./users-explorer.component.scss']
+  styleUrls: ['./users-explorer.component.scss'],
 })
 export class UsersExplorerComponent {
   query = '';
