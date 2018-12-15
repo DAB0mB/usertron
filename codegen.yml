@@ -1,10 +1,14 @@
-schema: ../WhatsApp-Clone-server/src/schema.ts
+schema:
+  https://api.github.com/graphql:
+    headers:
+      User-Agent: usertron
+      Authorization: token 6552a4da088068989fec43ea6c8c91369969db16
 documents: ./src/app/**/*.ts
 overwrite: true
 require:
   - ts-node/register
 generates:
-  ./app/graphql-types.ts:
+  ./src/app/graphql-types.ts:
     plugins:
       - typescript-common
       - typescript-client

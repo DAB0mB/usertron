@@ -43,4 +43,4 @@ testem.log
 Thumbs.db
 
 # Custom
-/app/graphql-types.ts
+/src/app/graphql-types.ts

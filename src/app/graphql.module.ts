@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core'
 import { HttpClientModule } from '@angular/common/http'
+import { NgModule } from '@angular/core'
 import { ApolloModule, Apollo } from 'apollo-angular'
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-
-const uri = 'https://api.github.com/graphql'
+import { setContext } from 'apollo-link-context'
 
 @NgModule({
   exports: [
@@ -18,9 +17,20 @@ export class GraphQLModule {
     apollo: Apollo,
     httpLink: HttpLink
   ) {
-    // create Apollo
+    const http = httpLink.create({
+      uri: 'https://api.github.com/graphql'
+    })
+
+    const auth = setContext((_, { headers }) => {
+      return {
+        headers: headers
+          .append('User-Agent', 'usertron')
+          .append('Authorization', 'token 6552a4da088068989fec43ea6c8c91369969db16')
+      }
+    })
+
     apollo.create({
-      link: httpLink.create({ uri }),
+      link: auth.concat(http),
       cache: new InMemoryCache(),
     })
   }

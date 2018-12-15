@@ -9,7 +9,7 @@ const SEARCH_USERS = gql `
     search(
       query: $query,
       type: USER,
-      first: ${NODES_PER_PAGE},
+      first: 10,
       after: $after,
       before: $before
     ) {
@@ -21,13 +21,17 @@ const SEARCH_USERS = gql `
         hasPreviousPage
       }
       nodes {
-        id
-        avatarUrl
-        email
-        location
-        name
+        ...userFields
       }
     }
+  }
+
+  fragment userFields on User {
+    id
+    avatarUrl
+    email
+    location
+    name
   }
 `
 
