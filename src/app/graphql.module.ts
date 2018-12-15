@@ -23,7 +23,7 @@ export class GraphQLModule {
 
     const auth = setContext(() => ({
       headers: {
-        'Authorization': 'token 6552a4da088068989fec43ea6c8c91369969db16',
+        'Authorization': 'token ec071d9141d9456662ca6372778b5e69a8df0e33',
       }
     }))
 

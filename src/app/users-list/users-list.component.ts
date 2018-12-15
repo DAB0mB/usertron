@@ -1,8 +1,12 @@
-import { Component } from '@angular/core'
+import { Component, Input } from '@angular/core'
+import { UserFields } from '../graphql-types'
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
-export class UsersListComponent { }
+export class UsersListComponent {
+  @Input()
+  users: UserFields.Fragment[] = [];
+}

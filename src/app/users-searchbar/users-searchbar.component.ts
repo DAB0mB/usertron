@@ -11,10 +11,7 @@ export class UsersSearchbarComponent {
   query = '';
   hasNextPage = false;
   hasPreviousPage = false;
-  usersFound = false;
-
-  @Output()
-  users = new EventEmitter<UserFields.Fragment[]>();
+  users: UserFields.Fragment[] = [];
 
   constructor(private github: GithubService) { }
 
@@ -22,9 +19,7 @@ export class UsersSearchbarComponent {
     this.github.searchUsers(this.query).subscribe((result) => {
       this.hasNextPage = result.hasNextPage
       this.hasPreviousPage = result.hasPreviousPage
-      this.usersFound = !!result.nodes.length
-
-      this.users.emit(result.nodes)
+      this.users = result.nodes
     })
   }
 
@@ -32,9 +27,7 @@ export class UsersSearchbarComponent {
     this.github.getNextUsersPage().subscribe((result) => {
       this.hasNextPage = result.hasNextPage
       this.hasPreviousPage = result.hasPreviousPage
-      this.usersFound = !!result.nodes.length
-
-      this.users.emit(result.nodes)
+      this.users = result.nodes
     })
   }
 
@@ -42,9 +35,7 @@ export class UsersSearchbarComponent {
     this.github.getPrevUsersPage().subscribe((result) => {
       this.hasNextPage = result.hasNextPage
       this.hasPreviousPage = result.hasPreviousPage
-      this.usersFound = !!result.nodes.length
-
-      this.users.emit(result.nodes)
+      this.users = result.nodes
     })
   }
 }

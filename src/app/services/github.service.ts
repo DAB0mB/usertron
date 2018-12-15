@@ -11,11 +11,18 @@ import { SearchUsers } from '../graphql-types'
 const NODES_PER_PAGE = 10
 
 const SEARCH_USERS = gql `
-  query SearchUsers($query: String!, $after: String, $before: String) {
+  query SearchUsers(
+    $query: String!,
+    $first: Int,
+    $last: Int,
+    $after: String,
+    $before: String
+  ) {
     search(
-      query: $query,
       type: USER,
-      first: 10,
+      query: $query,
+      first: $first,
+      last: $last,
       after: $after,
       before: $before
     ) {
@@ -34,10 +41,11 @@ const SEARCH_USERS = gql `
 
   fragment userFields on User {
     id
+    bio
+    name
     avatarUrl
     email
     location
-    name
   }
 `
 
@@ -57,7 +65,7 @@ export class GithubService {
   searchUsers(query) {
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
-      variables: { query }
+      variables: { query, first: NODES_PER_PAGE }
     })
     .pipe(map((res) => {
       const { search } = res.data
@@ -95,7 +103,7 @@ export class GithubService {
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
-      variables: { query: this.query, after: this.startCursor }
+      variables: { query: this.query, after: this.endCursor, first: NODES_PER_PAGE }
     })
     .pipe(map((res) => {
       const { search } = res.data
@@ -131,7 +139,7 @@ export class GithubService {
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
-      variables: { query: this.query, before: this.endCursor }
+      variables: { query: this.query, before: this.startCursor, last: NODES_PER_PAGE }
     })
     .pipe(map((res) => {
       const { search } = res.data

@@ -1,7 +1,9 @@
 <input type="text" [(ngModel)]="query">
 <button (click)="searchUsers()">Search</button>
 
-<div *ngIf="usersFound">
+<app-users-list [(users)]="users"></app-users-list>
+
+<div *ngIf="users.length">
   <button [disabled]="!hasPreviousPage" (click)="getPrevUsersPage()">Prev</button>
   <button [disabled]="!hasNextPage" (click)="getNextUsersPage()">Next</button>
 </div>
