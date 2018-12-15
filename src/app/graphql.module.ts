@@ -4,6 +4,7 @@ import { ApolloModule, Apollo } from 'apollo-angular'
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
+import { environment } from '../environments/environment'
 
 @NgModule({
   exports: [
@@ -23,7 +24,7 @@ export class GraphQLModule {
 
     const auth = setContext(() => ({
       headers: {
-        'Authorization': 'token ec071d9141d9456662ca6372778b5e69a8df0e33',
+        'Authorization': `token ${environment.githubAccessToken}`,
       }
     }))
 

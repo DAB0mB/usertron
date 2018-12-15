@@ -6,13 +6,13 @@ import { AppComponent } from './app.component'
 import { GraphQLModule } from './graphql.module'
 import { GithubService } from './services/github.service'
 import { UsersListComponent } from './users-list/users-list.component'
-import { UsersSearchbarComponent } from './users-searchbar/users-searchbar.component'
+import { UsersExplorerComponent } from './users-explorer/users-explorer.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersListComponent,
-    UsersSearchbarComponent
+    UsersExplorerComponent
   ],
   imports: [
     BrowserModule,

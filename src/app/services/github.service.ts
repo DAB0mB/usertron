@@ -6,8 +6,6 @@ import { map } from 'rxjs/operators'
 
 import { SearchUsers } from '../graphql-types'
 
-// Note that this can't be used directly in the document because codegen
-// can't process string interpolations
 const NODES_PER_PAGE = 10
 
 const SEARCH_USERS = gql `
@@ -58,7 +56,7 @@ export class GithubService {
   startCursor = '';
   endCursor = '';
   query = '';
-  currNodes: SearchUsers.Nodes[] = [];
+  pageNodes: SearchUsers.Nodes[] = [];
 
   constructor(private apollo: Apollo) {}
 
@@ -76,29 +74,17 @@ export class GithubService {
       this.endCursor = pageInfo.endCursor
       this.hasNextPage = pageInfo.hasNextPage
       this.hasPreviousPage = pageInfo.hasPreviousPage
-      this.currNodes = search.nodes
+      this.pageNodes = search.nodes
       this.query = query
       this.currPage = 1
 
-      return {
-        hasNextPage: this.hasNextPage,
-        hasPreviousPage: this.hasPreviousPage,
-        totalPages: this.totalPages,
-        currPage: this.currPage,
-        nodes: this.currNodes
-      }
+      return this.pluckResult()
     }))
   }
 
   getNextUsersPage() {
     if (this.currPage + 1 === this.totalPages) {
-      return Observable.create(o => o.next({
-        hasNextPage: this.hasNextPage,
-        hasPreviousPage: this.hasPreviousPage,
-        totalPages: this.totalPages,
-        currPage: this.currPage,
-        nodes: this.currNodes,
-      }))
+      return Observable.create(o => o.next(this.pluckResult()))
     }
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
@@ -113,28 +99,16 @@ export class GithubService {
       this.endCursor = pageInfo.endCursor
       this.hasNextPage = pageInfo.hasNextPage
       this.hasPreviousPage = pageInfo.hasPreviousPage
-      this.currNodes = search.nodes
+      this.pageNodes = search.nodes
       this.currPage++
 
-      return {
-        hasNextPage: this.hasNextPage,
-        hasPreviousPage: this.hasPreviousPage,
-        totalPages: this.totalPages,
-        currPage: this.currPage,
-        nodes: search.nodes,
-      }
+      return this.pluckResult()
     }))
   }
 
   getPrevUsersPage() {
     if (this.currPage - 1 === 0) {
-      return Observable.create(o => o.next({
-        hasNextPage: this.hasNextPage,
-        hasPreviousPage: this.hasPreviousPage,
-        totalPages: this.totalPages,
-        currPage: this.currPage,
-        nodes: this.currNodes,
-      }))
+      return Observable.create(o => o.next(this.pluckResult()))
     }
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
@@ -149,16 +123,20 @@ export class GithubService {
       this.endCursor = pageInfo.endCursor
       this.hasNextPage = pageInfo.hasNextPage
       this.hasPreviousPage = pageInfo.hasPreviousPage
-      this.currNodes = search.nodes
+      this.pageNodes = search.nodes
       this.currPage--
 
-      return {
-        hasNextPage: this.hasNextPage,
-        hasPreviousPage: this.hasPreviousPage,
-        totalPages: this.totalPages,
-        currPage: this.currPage,
-        nodes: this.currNodes,
-      }
+      return this.pluckResult()
     }))
+  }
+
+  pluckResult() {
+    return {
+      hasNextPage: this.hasNextPage,
+      hasPreviousPage: this.hasPreviousPage,
+      totalPages: this.totalPages,
+      currPage: this.currPage,
+      pageNodes: this.pageNodes,
+    }
   }
 }

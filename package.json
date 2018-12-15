@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "codegen": "gql-gen --config ./codegen.yml"
+    "codegen": "gql-gen --config ./codegen.config.js"
   },
   "private": true,
   "dependencies": {
