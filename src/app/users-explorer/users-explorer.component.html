@@ -4,6 +4,8 @@
 
 <button class="search-btn" mat-button color="primary" (click)="searchUsers()">Search</button>
 
+<h3 *ngIf="users.length">{{this.totalUsers}} users found</h3>
+
 <app-users-list [(users)]="users"></app-users-list>
 
 <div *ngIf="users.length" class="nav-buttons">

@@ -11,6 +11,7 @@ export class UsersExplorerComponent {
   query = '';
   hasNextPage = false;
   hasPreviousPage = false;
+  totalUsers = 0;
   users: UserFields.Fragment[] = [];
 
   constructor(private github: GithubService) { }
@@ -20,6 +21,7 @@ export class UsersExplorerComponent {
       this.hasNextPage = result.hasNextPage
       this.hasPreviousPage = result.hasPreviousPage
       this.users = result.pageNodes
+      this.totalUsers = result.totalNodes
     })
   }
 

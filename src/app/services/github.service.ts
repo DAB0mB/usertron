@@ -8,6 +8,13 @@ import { SearchUsers } from '../graphql-types'
 
 const NODES_PER_PAGE = 10
 
+const DEFAULT_VARS = {
+  first: null,
+  last: null,
+  before: null,
+  after: null,
+}
+
 const SEARCH_USERS = gql `
   query SearchUsers(
     $query: String!,
@@ -52,6 +59,7 @@ const SEARCH_USERS = gql `
 export class GithubService {
   totalPages = 0;
   currPage = 0;
+  totalNodes = 0;
   hasNextPage = false;
   hasPreviousPage = false;
   startCursor = '';
@@ -64,7 +72,11 @@ export class GithubService {
   searchUsers(query) {
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
-      variables: { query, first: NODES_PER_PAGE }
+      variables: {
+        ...DEFAULT_VARS,
+        query,
+        first: NODES_PER_PAGE,
+      }
     })
     .pipe(map((res) => {
       const { search } = res.data
@@ -76,6 +88,7 @@ export class GithubService {
       this.hasNextPage = pageInfo.hasNextPage
       this.hasPreviousPage = pageInfo.hasPreviousPage
       this.pageNodes = search.nodes
+      this.totalNodes = search.userCount
       this.query = query
       this.currPage = 1
 
@@ -90,7 +103,12 @@ export class GithubService {
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
-      variables: { query: this.query, after: this.endCursor, first: NODES_PER_PAGE }
+      variables: {
+        ...DEFAULT_VARS,
+        query: this.query,
+        after: this.endCursor,
+        first: NODES_PER_PAGE,
+      }
     })
     .pipe(map((res) => {
       const { search } = res.data
@@ -101,6 +119,7 @@ export class GithubService {
       this.hasNextPage = pageInfo.hasNextPage
       this.hasPreviousPage = pageInfo.hasPreviousPage
       this.pageNodes = search.nodes
+      this.totalNodes = search.userCount
       this.currPage++
 
       return this.pluckResult()
@@ -114,7 +133,12 @@ export class GithubService {
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
       query: SEARCH_USERS,
-      variables: { query: this.query, before: this.startCursor, last: NODES_PER_PAGE }
+      variables: {
+        ...DEFAULT_VARS,
+        query: this.query,
+        before: this.startCursor,
+        last: NODES_PER_PAGE,
+      }
     })
     .pipe(map((res) => {
       const { search } = res.data
@@ -125,6 +149,7 @@ export class GithubService {
       this.hasNextPage = pageInfo.hasNextPage
       this.hasPreviousPage = pageInfo.hasPreviousPage
       this.pageNodes = search.nodes
+      this.totalNodes = search.userCount
       this.currPage--
 
       return this.pluckResult()
@@ -138,6 +163,7 @@ export class GithubService {
       totalPages: this.totalPages,
       currPage: this.currPage,
       pageNodes: this.pageNodes,
+      totalNodes: this.totalNodes,
     }
   }
 }
