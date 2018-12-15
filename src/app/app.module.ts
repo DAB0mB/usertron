@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 
 import { AppComponent } from './app.component'
 import { GraphQLModule } from './graphql.module'
@@ -15,7 +16,8 @@ import { UsersSearchbarComponent } from './users-searchbar/users-searchbar.compo
   ],
   imports: [
     BrowserModule,
-    GraphQLModule
+    GraphQLModule,
+    FormsModule,
   ],
   providers: [
     GithubService

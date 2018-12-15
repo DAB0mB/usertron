@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Apollo } from 'apollo-angular'
 import gql from 'graphql-tag'
+import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 import { SearchUsers } from '../graphql-types'
 
+// Note that this can't be used directly in the document because codegen
+// can't process string interpolations
 const NODES_PER_PAGE = 10
 
 const SEARCH_USERS = gql `
@@ -40,12 +43,14 @@ const SEARCH_USERS = gql `
 
 @Injectable()
 export class GithubService {
-  private totalPages = 0;
-  private currPage = 0;
-  private startCursor = '';
-  private endCursor = '';
-  private query = '';
-  private currNodes = [];
+  totalPages = 0;
+  currPage = 0;
+  hasNextPage = false;
+  hasPreviousPage = false;
+  startCursor = '';
+  endCursor = '';
+  query = '';
+  currNodes: SearchUsers.Nodes[] = [];
 
   constructor(private apollo: Apollo) {}
 
@@ -61,25 +66,31 @@ export class GithubService {
       this.totalPages = Math.min(Math.ceil(search.userCount / NODES_PER_PAGE), 100)
       this.startCursor = pageInfo.startCursor
       this.endCursor = pageInfo.endCursor
+      this.hasNextPage = pageInfo.hasNextPage
+      this.hasPreviousPage = pageInfo.hasPreviousPage
       this.currNodes = search.nodes
       this.query = query
-      this.currPage = 0
+      this.currPage = 1
 
       return {
+        hasNextPage: this.hasNextPage,
+        hasPreviousPage: this.hasPreviousPage,
         totalPages: this.totalPages,
         currPage: this.currPage,
-        nodes: this.currNodes,
+        nodes: this.currNodes
       }
     }))
   }
 
   getNextUsersPage() {
     if (this.currPage + 1 === this.totalPages) {
-      return {
+      return Observable.create(o => o.next({
+        hasNextPage: this.hasNextPage,
+        hasPreviousPage: this.hasPreviousPage,
         totalPages: this.totalPages,
         currPage: this.currPage,
         nodes: this.currNodes,
-      }
+      }))
     }
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
@@ -92,10 +103,14 @@ export class GithubService {
 
       this.startCursor = pageInfo.startCursor
       this.endCursor = pageInfo.endCursor
+      this.hasNextPage = pageInfo.hasNextPage
+      this.hasPreviousPage = pageInfo.hasPreviousPage
       this.currNodes = search.nodes
       this.currPage++
 
       return {
+        hasNextPage: this.hasNextPage,
+        hasPreviousPage: this.hasPreviousPage,
         totalPages: this.totalPages,
         currPage: this.currPage,
         nodes: search.nodes,
@@ -104,12 +119,14 @@ export class GithubService {
   }
 
   getPrevUsersPage() {
-    if (this.currPage - 1 < 0) {
-      return {
+    if (this.currPage - 1 === 0) {
+      return Observable.create(o => o.next({
+        hasNextPage: this.hasNextPage,
+        hasPreviousPage: this.hasPreviousPage,
         totalPages: this.totalPages,
         currPage: this.currPage,
         nodes: this.currNodes,
-      }
+      }))
     }
 
     return this.apollo.query<SearchUsers.Query, SearchUsers.Variables>({
@@ -122,10 +139,14 @@ export class GithubService {
 
       this.startCursor = pageInfo.startCursor
       this.endCursor = pageInfo.endCursor
+      this.hasNextPage = pageInfo.hasNextPage
+      this.hasPreviousPage = pageInfo.hasPreviousPage
       this.currNodes = search.nodes
       this.currPage--
 
       return {
+        hasNextPage: this.hasNextPage,
+        hasPreviousPage: this.hasPreviousPage,
         totalPages: this.totalPages,
         currPage: this.currPage,
         nodes: this.currNodes,
